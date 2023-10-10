@@ -1,0 +1,11 @@
+FROM node:slim AS build
+WORKDIR /WIK-DPS-TP01CORRECTION-TS
+COPY package*.json ./
+RUN npm install
+
+FROM node:slim
+RUN useradd -m -r -u 1001 user
+RUN chown -R user:user /WIK-DPS-TP01CORRECTION-TS
+USER user
+COPY --from=build /WIK-DPS-TP01CORRECTION-TS/node_modules ./node_modules
+CMD node build/index.js
